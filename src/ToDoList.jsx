@@ -35,8 +35,8 @@ export default function ToDoList() {
                 />
                 <button
                     className="bg-blue-400 px-4 rounded hover:bg-blue-500 "
-                    onClick={addTodo}
-                >Add</button>
+                    onClick={addTodo}>Add
+                </button>
             </div>
             <ul>
                 {todos.map((todo, index) => {
@@ -44,7 +44,7 @@ export default function ToDoList() {
                         <li key={index} className=" bg-blue-100 flex justify-between items-center mt-2 mb-2  border h-9">
                             
                         <span className="ml-2">{todo}</span>
-                            <button onClick={() => removeTodo(index)}
+                        <button onClick={() => removeTodo(index)}
                              className="bg-red-400 px-1.5 rounded h-full hover:bg-red-500 ">
                             Delete
                         </button>
