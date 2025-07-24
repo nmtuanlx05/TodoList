@@ -1,4 +1,5 @@
-export default function TodoItem({ todo, onToggle, onRemove  }) {
+export default function TodoItem({ todo, onToggle, onRemove }) {
+    const isCompleted = todo.completed
     return (
         <li  className={` bg-blue-100 flex justify-between items-center mt-2 mb-2  border h-9  ${ todo.completed ? "opacity-50 " : ""} `}>   
             <input type="checkbox"
@@ -7,10 +8,17 @@ export default function TodoItem({ todo, onToggle, onRemove  }) {
                 onChange={onToggle}
             />    
             <span className="ml-2">{todo.text}</span>
-            <button onClick={onRemove}
+            {isCompleted ? (
+                <button
+                    disabled
+                    className="bg-red-400 px-1.5 rounded h-full   ">
+                    Completed
+                </button>
+            ) : (<button onClick={onRemove}
                 className="bg-red-400 px-1.5 rounded h-full hover:bg-red-500 ">
-                Delete
-            </button>
+                {todo.completed ? "Completed" : "Delete"}
+            </button>)
+            }
         </li>
     )
 }
