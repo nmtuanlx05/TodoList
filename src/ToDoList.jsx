@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TodoInput from "./components/TodoInput";
-import TodoItem from "./components/TodoItem";
+import TodoColumn from "./components/TodoColumn";
 export default function ToDoList() {
   const [todos, setTodos] = useState(() => {
     const stored = localStorage.getItem("todos");
@@ -18,18 +18,21 @@ export default function ToDoList() {
       const newTodo = {
         id: Date.now(),
         text: input.trim(),
-        completed: false,
+        status: "Todo",
       };
       setTodos([...todos, newTodo]);
       setInput("");
     }
   };
 
-  const toggleComplete = (id) => {
+  const changeStatus = (id) => {
     setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
+      prev.map((Todo) => {
+        if (Todo.id != id) return Todo;
+        if (Todo.status == "Todo") return { ...Todo, status: "Doing" };
+        if (Todo.status == "Doing") return { ...Todo, status: "Done" };
+        return Todo;
+      })
     );
   };
 
@@ -42,21 +45,31 @@ export default function ToDoList() {
   };
 
   return (
-    <div className="border shadow p-8 mx-auto max-w-md mt-14 bg-blue-200  ">
-      <h2 className="text-center mb-4 text-xl font-bold  ">Todo List</h2>
+    <div className="p-2 max-w-6xl mx-auto">
       <TodoInput input={input} setInput={setInput} addTodo={addTodo} />
-      <ul>
-        {todos.map((todo) => {
-          return (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              onToggle={() => toggleComplete(todo.id)}
-              onRemove={() => removeTodo(todo.id)}
-            />
-          );
-        })}
-      </ul>
+      <div className="flex flex-col md:flex-row gap-4 mt-4">
+        <TodoColumn
+          key="Todo"
+          status="Todo"
+          todos={todos}
+          onAdvance={changeStatus}
+          onRemove={removeTodo}
+        />
+        <TodoColumn
+          key="Doing"
+          status="Doing"
+          todos={todos}
+          onAdvance={changeStatus}
+          onRemove={removeTodo}
+        />
+        <TodoColumn
+          key="Done"
+          status="Done"
+          todos={todos}
+          onAdvance={changeStatus}
+          onRemove={removeTodo}
+        />
+      </div>
     </div>
   );
 }
